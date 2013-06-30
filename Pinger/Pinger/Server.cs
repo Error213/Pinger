@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+
 
 namespace Pinger
 {
-    class Server
+    public class Server
     {
-        string serverName;
-        string dnsIP;
-        Game game;
+        public string serverName { get; set; }
+        public string dnsIP { get; set; }
+        public Game game { get; set; }
 
-        public Server()
+        private Server()
         {
-            serverName = "testServer";
-            dnsIP = "test.server.hr";
-            game = new Game("Call of duty",0);
+
         }
 
         public Server(string server,string IP, Game _game)

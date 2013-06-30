@@ -13,7 +13,6 @@ namespace Pinger
     {
         public static void SetServer(Server server, MainForm form)
         {
-            Arrays.servers.Add(server);
             form.treeView.Nodes[server.GetGame().GetGameName()].Nodes.Add(server.GetServerName() + " " + server.GetDnsIP());
             form.treeView.ExpandAll();
 

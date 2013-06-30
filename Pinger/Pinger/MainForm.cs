@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Pinger
 {
@@ -37,6 +40,7 @@ namespace Pinger
             {
                 server = new Server(NewServer.GetServerName(), NewServer.GetServerIP(),(Game)(Arrays.games[NewServer.GetGame()]));
                 NewServer.Dispose();
+                Arrays.servers.Add(server);
                 Commands.SetServer(server,this);
             }
             else
@@ -129,7 +133,7 @@ namespace Pinger
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" Version 0.¸8.1 \n Pinger Software \n Copyright LGPL license \n"+ " http://www.gnu.org/licenses/lgpl.html ", "About", MessageBoxButtons.OK);
+            MessageBox.Show(" Version 0.¸9.3 \n Pinger Software \n Copyright LGPL license \n"+ " http://www.gnu.org/licenses/lgpl.html ", "About", MessageBoxButtons.OK);
         }
         #endregion
 
@@ -183,10 +187,57 @@ namespace Pinger
         private void saveServersToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "XML files (*.xml)|*.xml";
+            saveFileDialog.InitialDirectory = ".";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Stream myStream = null;
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Server>));
+                    serializer.Serialize(myStream, Arrays.servers);
+                    myStream.Close();
+                }
+                saveFileDialog.Dispose();
+            }
+
         }
 
         private void loadServersToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+			OpenFileDialog.InitialDirectory=".";
+            OpenFileDialog.Filter = "XML files (*.xml)|*.xml";
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Arrays.servers.Clear();
+                Arrays.games.Clear();
+                treeView.Nodes.Clear();
+                listView.Items.Clear();
+
+                Stream myStream = null;
+                if ((myStream = OpenFileDialog.OpenFile()) != null)
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Server>));
+                    Arrays.servers.AddRange((List<Server>)serializer.Deserialize(myStream));
+                    foreach (Server server in Arrays.servers)
+                    {
+                        bool isGame = false;
+                        foreach (Game game in Arrays.games)
+                        {
+                            if (game.gameName == server.game.gameName)
+                                isGame = true;
+                        }
+                        if (isGame == false)
+                            Commands.SetGame(server.game, this);
+                        Commands.SetServer(server, this);
+                    }
+
+                }
+
+            }
 
         }
 

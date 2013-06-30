@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace Pinger
 {
-    class Game
+    public class Game
     {
         public enum Genre { FPS, RTS, RPG, MMO, MOBA, TPS, Sandbox, Other };
-        private string gameName;
-        private Genre genre;
+        public string gameName { get; set; }
+        public Genre genre { get; set; }
 
+        public Game()
+        {
+
+        }
 
         public Game(string name,int genreSelector)
         {
