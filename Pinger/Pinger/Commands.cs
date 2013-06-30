@@ -42,7 +42,7 @@ namespace Pinger
             Ping ping = new Ping();
             PingOptions options = new PingOptions();
             byte[] buffer = new byte[32];
-            int timeout = 2;
+            int timeout = 200;
             PingReply reply;
 
             try

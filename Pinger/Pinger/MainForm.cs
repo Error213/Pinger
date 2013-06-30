@@ -133,7 +133,7 @@ namespace Pinger
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" Version 0.¸9.3 \n Pinger Software \n Copyright LGPL license \n"+ " http://www.gnu.org/licenses/lgpl.html ", "About", MessageBoxButtons.OK);
+            MessageBox.Show(" Version 1.1.8 BETA \n Pinger Software \n Author: Luka Svalina \n Git: https://github.com/Error213/Pinger \n Copyright LGPL license \n" + " http://www.gnu.org/licenses/lgpl.html ", "About", MessageBoxButtons.OK);
         }
         #endregion
 
@@ -212,6 +212,9 @@ namespace Pinger
             OpenFileDialog.Filter = "XML files (*.xml)|*.xml";
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
+
+                try
+                {
                 Arrays.servers.Clear();
                 Arrays.games.Clear();
                 treeView.Nodes.Clear();
@@ -237,16 +240,28 @@ namespace Pinger
 
                 }
 
+                }
+                catch
+                {
+                    MessageBox.Show("Error loading server list!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
             }
 
         }
 
         private void deleteServersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Arrays.servers.Clear();
-            Arrays.games.Clear();
-            treeView.Nodes.Clear();
-            listView.Items.Clear();
+            DialogResult result = MessageBox.Show("Are You sure to delete server list?","Are You sure?",MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                Arrays.servers.Clear();
+                Arrays.games.Clear();
+                treeView.Nodes.Clear();
+                listView.Items.Clear();
+            }
         }
         #endregion
 
